@@ -50,7 +50,7 @@ namespace TickTackToes
             this.Height = 370;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.CornflowerBlue; // Цвет фона формы
-
+            Application.Exit();
 
         }
         private void MyButton_Click(object sender, EventArgs e)

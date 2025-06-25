@@ -28,41 +28,66 @@
         /// </summary>
         private void InitializeComponent()
         {
-            StartSoloGame = new Button();
             StartMultiplayer = new Button();
+            StartSoloGame = new Button();
+            tableLayoutPanel1 = new TableLayoutPanel();
             Exit = new Button();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
+            // 
+            // StartMultiplayer
+            // 
+            StartMultiplayer.BackColor = Color.DarkSeaGreen;
+            StartMultiplayer.Dock = DockStyle.Fill;
+            StartMultiplayer.Font = new Font("Showcard Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            StartMultiplayer.Location = new Point(3, 42);
+            StartMultiplayer.Name = "StartMultiplayer";
+            StartMultiplayer.Size = new Size(194, 33);
+            StartMultiplayer.TabIndex = 1;
+            StartMultiplayer.Text = "Multiplayer(local)";
+            StartMultiplayer.UseVisualStyleBackColor = false;
+            StartMultiplayer.Click += StartMultiplayer_Click;
             // 
             // StartSoloGame
             // 
             StartSoloGame.BackColor = Color.DarkSeaGreen;
+            StartSoloGame.Dock = DockStyle.Fill;
             StartSoloGame.Font = new Font("Showcard Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            StartSoloGame.Location = new Point(492, 223);
+            StartSoloGame.Location = new Point(3, 3);
             StartSoloGame.Name = "StartSoloGame";
-            StartSoloGame.Size = new Size(162, 31);
+            StartSoloGame.Size = new Size(194, 33);
             StartSoloGame.TabIndex = 0;
             StartSoloGame.Text = "Solo game";
             StartSoloGame.UseVisualStyleBackColor = false;
             StartSoloGame.Click += SoloGameClick;
             // 
-            // StartMultiplayer
+            // tableLayoutPanel1
             // 
-            StartMultiplayer.Location = new Point(492, 291);
-            StartMultiplayer.Name = "StartMultiplayer";
-            StartMultiplayer.Size = new Size(162, 31);
-            StartMultiplayer.TabIndex = 1;
-            StartMultiplayer.Text = "Multiplayer(local)";
-            StartMultiplayer.UseVisualStyleBackColor = true;
-            StartMultiplayer.Click += StartMultiplayer_Click;
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(StartSoloGame, 0, 0);
+            tableLayoutPanel1.Controls.Add(StartMultiplayer, 0, 1);
+            tableLayoutPanel1.Controls.Add(Exit, 0, 2);
+            tableLayoutPanel1.Location = new Point(468, 243);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.Size = new Size(200, 119);
+            tableLayoutPanel1.TabIndex = 3;
             // 
             // Exit
             // 
-            Exit.Location = new Point(492, 360);
+            Exit.BackColor = Color.DarkSeaGreen;
+            Exit.Dock = DockStyle.Fill;
+            Exit.Font = new Font("Showcard Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Exit.Location = new Point(3, 81);
             Exit.Name = "Exit";
-            Exit.Size = new Size(162, 29);
+            Exit.Size = new Size(194, 35);
             Exit.TabIndex = 2;
             Exit.Text = "Exit";
-            Exit.UseVisualStyleBackColor = true;
+            Exit.UseVisualStyleBackColor = false;
             Exit.Click += Exit_Click;
             // 
             // Menu
@@ -72,19 +97,17 @@
             BackgroundImage = Properties.Resources._8339bec72f606bb96256b486fe867580;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1129, 697);
-            Controls.Add(Exit);
-            Controls.Add(StartMultiplayer);
-            Controls.Add(StartSoloGame);
+            Controls.Add(tableLayoutPanel1);
             Name = "Menu";
             Text = "TickTackToe";
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Button StartSoloGame;
         private Button StartMultiplayer;
+        private Button StartSoloGame;
+        private TableLayoutPanel tableLayoutPanel1;
         private Button Exit;
-
     }
 }
