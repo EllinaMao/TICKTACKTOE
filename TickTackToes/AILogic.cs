@@ -12,7 +12,7 @@ namespace TickTackToes
         public readonly char aiSymbol;
         public readonly char playerSymbol;
 
-        AILogic(GameLogic logic, bool symbol)
+        public AILogic(GameLogic logic, bool symbol)
         {
             
             this.logic = logic;

@@ -20,6 +20,7 @@ namespace TickTackToes
         {
             int randomNumber = new Random().Next(0, 2); // верхняя не включительно
             isXTurn = Convert.ToBoolean(randomNumber);
+            forAI = !isXTurn;
             InitializeComponent();
             this.KeyPreview = true;
             this.KeyDown += TickTackToe_KeyDown;
@@ -75,45 +76,12 @@ namespace TickTackToes
             Player(btn, row, col);
 
             // Ход ИИ (если solo game)
-            if (isSoloGame && !isGameWon)
+            if (isSoloGame && isXTurn == forAI)
             {
-                var aiLogic = new AILogic(gameLogic, isXTurn);
-                var move = aiLogic.FindBestMove();
-                if (move != null)
-                {
-                    // Найти соответствующую кнопку по координатам
-                    foreach (Control c in tableLayoutPanel2.Controls)
-                    {
-                        if (c is Button aiBtn &&
-                            tableLayoutPanel2.GetRow(aiBtn) == move.Value.row &&
-                            tableLayoutPanel2.GetColumn(aiBtn) == move.Value.col)
-                        {
-                            aiBtn.Text = isXTurn ? "X" : "O";
-                            aiBtn.Enabled = false;
-                            gameLogic.MakeMove(move.Value.row, move.Value.col, aiBtn.Text);
-                            break;
-                        }
-                    }
-
-                    if (gameLogic.CheckWin())
-                    {
-                        isGameWon = true;
-                        InteractionUI.ShowWin(isXTurn);
-                        
-                        return;
-                    }
-                    if (gameLogic.CheckDraw())
-                    {
-                        isGameWon = true;
-                        InteractionUI.ShowDraw();
-                        
-                        return;
-                    }
-
-                    isXTurn = !isXTurn;
-                    InteractionUI.ShowPlayerTurn(isXTurn);
-                }
+                SoloGameAi();
             }
+
+
         }
 
 
@@ -145,10 +113,54 @@ namespace TickTackToes
             isXTurn = !isXTurn;
             InteractionUI.ShowPlayerTurn(isXTurn);
 
+
         }
 
 
+        void SoloGameAi()
+        {
+            if (isSoloGame && !isGameWon)
+            {
+                var aiLogic = new AILogic(gameLogic, isXTurn);
+                var move = aiLogic.FindBestMove();
+                if (move != null)
+                {
+                    
+                    foreach (Control c in tableLayoutPanel2.Controls)
+                    {
+                        if (c is Button aiBtn &&
+                            tableLayoutPanel2.GetRow(aiBtn) == move.Value.row &&
+                            tableLayoutPanel2.GetColumn(aiBtn) == move.Value.col)
+                        {
+                            aiBtn.Text = isXTurn ? "X" : "O";
+                            aiBtn.Enabled = false;
+                            gameLogic.MakeMove(move.Value.row, move.Value.col, aiBtn.Text);
+                            break;
+                        }
+                    }
 
+                    if (gameLogic.CheckWin())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowWin(isXTurn);
+
+                        return;
+                    }
+                    if (gameLogic.CheckDraw())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowDraw();
+                        return;
+                    }
+
+                    isXTurn = !isXTurn;
+                    InteractionUI.ShowPlayerTurn(isXTurn);
+                }
+            }
+
+
+
+        }
 
 
 
