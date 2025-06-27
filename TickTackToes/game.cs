@@ -88,8 +88,8 @@ namespace TickTackToes
             btn.Text = playerSymbol;
             btn.Enabled = false;
             gameLogic.MakeMove(row, col, playerSymbol);
-            GameOver();
             isXTurn = !isXTurn;
+            GameOver();
         }
         //обработка хода ИИ
         void SoloGameAi()
@@ -114,8 +114,8 @@ namespace TickTackToes
                     }
                 }
             }
-            GameOver();
             isXTurn = !isXTurn;
+            GameOver();
         }
 
         private void GameOver()
@@ -123,7 +123,7 @@ namespace TickTackToes
             if (gameLogic.CheckWin())
             {
                 isGameWon = true;
-                InteractionUI.ShowWin(isXTurn);
+                InteractionUI.ShowWin(!isXTurn);
                 isGameWon = true;
 
             }
@@ -131,19 +131,19 @@ namespace TickTackToes
             {
                 isGameWon = true;
                 InteractionUI.ShowDraw();
-
             }
 
             if (isGameWon)
             {
                 ResetGame();
             }
-
         }
+
         private void ResetGame()
         {
             gameLogic.Reset();
             isGameWon = false;
+            isXTurn = true;
             foreach (Control c in tableLayoutPanel2.Controls)
             {
                 if (c is Button btn)
@@ -155,8 +155,6 @@ namespace TickTackToes
 
             if (isSoloGame)
             {
-
-                isXTurn = true;
                 int randomNumber = new Random().Next(0, 2);
                 forAI = Convert.ToBoolean(randomNumber);
                 InteractionUI.ShowPlayerTurn(!forAI);
