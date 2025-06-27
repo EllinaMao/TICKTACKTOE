@@ -41,10 +41,9 @@
             StartSoloGame.Dock = DockStyle.Fill;
             StartSoloGame.FlatStyle = FlatStyle.Flat;
             StartSoloGame.Font = new Font("Impact", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StartSoloGame.Location = new Point(3, 4);
-            StartSoloGame.Margin = new Padding(3, 4, 3, 4);
+            StartSoloGame.Location = new Point(3, 3);
             StartSoloGame.Name = "StartSoloGame";
-            StartSoloGame.Size = new Size(258, 33);
+            StartSoloGame.Size = new Size(225, 25);
             StartSoloGame.TabIndex = 0;
             StartSoloGame.Text = "Solo game";
             StartSoloGame.UseVisualStyleBackColor = false;
@@ -57,10 +56,9 @@
             StartMultiplayer.FlatStyle = FlatStyle.Flat;
             StartMultiplayer.Font = new Font("Impact", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             StartMultiplayer.ForeColor = SystemColors.ControlText;
-            StartMultiplayer.Location = new Point(3, 45);
-            StartMultiplayer.Margin = new Padding(3, 4, 3, 4);
+            StartMultiplayer.Location = new Point(3, 34);
             StartMultiplayer.Name = "StartMultiplayer";
-            StartMultiplayer.Size = new Size(258, 33);
+            StartMultiplayer.Size = new Size(225, 25);
             StartMultiplayer.TabIndex = 1;
             StartMultiplayer.Text = "Multiplayer(local)";
             StartMultiplayer.UseVisualStyleBackColor = false;
@@ -73,10 +71,9 @@
             Exit.Dock = DockStyle.Fill;
             Exit.FlatStyle = FlatStyle.Flat;
             Exit.Font = new Font("Impact", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            Exit.Location = new Point(3, 86);
-            Exit.Margin = new Padding(3, 4, 3, 4);
+            Exit.Location = new Point(3, 65);
             Exit.Name = "Exit";
-            Exit.Size = new Size(258, 35);
+            Exit.Size = new Size(225, 26);
             Exit.TabIndex = 2;
             Exit.Text = "Exit";
             Exit.UseVisualStyleBackColor = false;
@@ -90,24 +87,24 @@
             tableLayoutPanel1.Controls.Add(StartSoloGame, 0, 0);
             tableLayoutPanel1.Controls.Add(StartMultiplayer, 0, 1);
             tableLayoutPanel1.Controls.Add(Exit, 0, 2);
-            tableLayoutPanel1.Location = new Point(519, 334);
+            tableLayoutPanel1.Location = new Point(454, 250);
+            tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.Size = new Size(264, 125);
+            tableLayoutPanel1.Size = new Size(231, 94);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // Menu
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources._8339bec72f606bb96256b486fe867580;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1290, 929);
+            ClientSize = new Size(1129, 697);
             Controls.Add(tableLayoutPanel1);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Menu";
             Text = "TickTackToe";
             tableLayoutPanel1.ResumeLayout(false);
