@@ -9,8 +9,8 @@ namespace TickTackToes
     internal class AILogic
     {
         private readonly GameLogic logic;
-        private readonly char aiSymbol;
-        private readonly char playerSymbol;
+        public readonly char aiSymbol;
+        public readonly char playerSymbol;
 
         AILogic(GameLogic logic, bool symbol)
         {

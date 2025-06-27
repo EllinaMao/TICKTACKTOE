@@ -11,6 +11,9 @@ namespace TickTackToes
         private bool isSoloGame;
         private bool isGameWon = false;
 
+        // Add a GameLogic instance
+        private GameLogic gameLogic;
+
         //constructors
         public TickTackToe(bool GameChoice)
         {
@@ -22,14 +25,17 @@ namespace TickTackToes
             this.KeyDown += TickTackToe_KeyDown;
             this.FormClosing += ExitButton_Click;
 
-     
-            isSoloGame = GameChoice;//true - solo game, false - multiplayer
+            isSoloGame = GameChoice; // true - solo game, false - multiplayer
 
+            // Initialize the GameLogic instance
+            gameLogic = new GameLogic();
         }
+
         private void ExitButton_Click(object? sender, EventArgs e)
         {
             Application.Exit();
         }
+
         private void TickTackToe_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -38,51 +44,51 @@ namespace TickTackToes
             }
         }
 
-        private void MyButton_Click(object sender, EventArgs e)
+        //private void MyButton_Click(object sender, EventArgs e)
+        //{
+        //    Button? btn = sender as Button;
+        //    if (btn == null || !string.IsNullOrEmpty(btn.Text))
+        //    {
+        //        return;
+        //    }
+
+        //    btn.Text = isXTurn ? "X" : "O";
+        //    btn.Enabled = false;
+        //    InteractionUI.ShowPlayerTurn(isXTurn);
+
+        //    gameBoard[tableLayoutPanel2.GetRow(btn), tableLayoutPanel2.GetColumn(btn)] = btn.Text;
+
+        //    isXTurn = !isXTurn;
+        //}
+
+
+
+        private void MultiplayerLogic()
         {
-            Button? btn = sender as Button;
-            if (btn == null || !string.IsNullOrEmpty(btn.Text))
+
+
+        }
+
+        private void SoloGameLogic()
+        {
+            AILogic aiLogic = new AILogic(gameLogic, isXTurn);
+            // AI's turn
+            (int row, int col)? aiMove = aiLogic.CanAIWin(aiLogic.aiSymbol);
+            if (aiMove == null)
             {
-                return;
+                aiMove = aiLogic.BlockPlayer();
+            }
+            if (aiMove == null)
+            {
+                // If no winning or blocking move, choose a random empty cell
+                aiMove = gameLogic.GetRandomEmptyCell();
+            }
+            if (aiMove != null)
+            {
+                gameLogic.MakeMove(aiMove.Value.row, aiMove.Value.col, aiLogic.aiSymbol);
+                isXTurn = !isXTurn;
+                InteractionUI.ShowPlayerTurn(isXTurn);
             }
 
-            btn.Text = isXTurn ? "X" : "O";
-            btn.Enabled = false;
-            movesCount++;
-            gameBoard[tableLayoutPanel2.GetRow(btn), tableLayoutPanel2.GetColumn(btn)] = btn.Text;
-
-            isXTurn = !isXTurn;
         }
-        
-        private void AIMove(int row, int emptyCol, char symbol)
-        {
-            
-        }
-        private bool TryCompleteRow(string simbol)
-        {
-            int count, emptyCol;
-            for (int row = 0; row < 3; row++)
-            {
-                count = 0; emptyCol = -1;
-                for (int col = 0; col<3; col++)
-                {
-                    if (gameBoard[row, col] == simbol)
-                    {
-                        count++;
-                    }
-                    else if (string.IsNullOrEmpty(gameBoard[row, col]))
-                    { 
-                        emptyCol = col;
-                    }
-                }
-            }
-            return false;
-
-        }
-        
-
-
-
-
-    }
 }
