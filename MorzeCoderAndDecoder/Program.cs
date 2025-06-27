@@ -1,5 +1,7 @@
-﻿namespace MorzeCoderAndDecoder
+﻿using MorzeDictionary;
+namespace MorzeCoderAndDecoder
 {
+
     /*
 Задание 3
 Создайте приложение для перевода обычного текста
