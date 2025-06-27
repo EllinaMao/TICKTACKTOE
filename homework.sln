@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36202.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "homework", "homework\homework.csproj", "{C92A121B-07B9-4941-93C4-40E163FC7146}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickTackToes", "TickTackToes\TickTackToes.csproj", "{0AE99419-8C27-49A8-A622-32D5596BE272}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C92A121B-07B9-4941-93C4-40E163FC7146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C92A121B-07B9-4941-93C4-40E163FC7146}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C92A121B-07B9-4941-93C4-40E163FC7146}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C92A121B-07B9-4941-93C4-40E163FC7146}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0AE99419-8C27-49A8-A622-32D5596BE272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0AE99419-8C27-49A8-A622-32D5596BE272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AE99419-8C27-49A8-A622-32D5596BE272}.Release|Any CPU.ActiveCfg = Release|Any CPU
