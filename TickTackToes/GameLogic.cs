@@ -41,6 +41,7 @@ namespace TickTackToes
 
         public bool CheckWin()
         {
+            if (MovesCount < 5) { return false; } 
             for (int i = 0; i < 3; i++)
             {
                 if (!string.IsNullOrEmpty(GameBoard[i, 0]) &&
@@ -73,6 +74,7 @@ namespace TickTackToes
 
         public bool CheckDraw()
         {
+            if (MovesCount < 5) { return false; }
             return MovesCount == 9 && !CheckWin();
         }
 

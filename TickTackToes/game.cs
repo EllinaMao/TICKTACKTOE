@@ -9,7 +9,7 @@ namespace TickTackToes
     {
         //флаги
         private bool isXTurn; // чей ход
-        readonly bool forAI; // храним флаг что бы знать что ход ИИ
+        private bool forAI; // храним флаг что бы знать что ход ИИ
         readonly bool isSoloGame;
         private bool isGameWon = false;
 
@@ -20,25 +20,33 @@ namespace TickTackToes
         public TickTackToe(bool GameChoice)
         {
             this.StartPosition = FormStartPosition.CenterScreen;
-            int randomNumber = new Random().Next(0, 2); // верхняя не включительно
-            isXTurn = Convert.ToBoolean(randomNumber);
-            forAI = !isXTurn;
-            InitializeComponent();
+            isSoloGame = GameChoice; // true - соло, false - мультиплеер(локальный!!!)
             this.KeyPreview = true;
             this.KeyDown += TickTackToe_KeyDown;
-            this.FormClosing += ExitButton_Click;
-
-            isSoloGame = GameChoice; // true - соло, false - мультиплеер(локальный!!!)
+            this.FormClosing += ExitMetod;
             gameLogic = new GameLogic();
-            InteractionUI.ShowPlayerTurn(isXTurn);
+            isXTurn = true;
+            InitializeComponent();
+            LoadProperties();
         }
 
-        //два метода для выхода из игры, потому что она постоянно крашилась
+        private void TickTackToe_Load(object? sender, EventArgs e)
+        {
+            if (isSoloGame && isXTurn == forAI)
+            {
+                InteractionUI.ShowPlayerTurn(!forAI);
+                SoloGameAi();
+            }
+        }
+        //при нажатии на кнопку выхода - приложение перезапускается
         private void ExitButton_Click(object? sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+        private void ExitMetod(object? sender, EventArgs e)
         {
             Application.Exit();
         }
-
         private void TickTackToe_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -69,9 +77,8 @@ namespace TickTackToes
             {
                 SoloGameAi();
             }
-
-            GameOver(); 
         }
+
 
         // обработка хода игрока
         void Player(Button btn, int row, int col)
@@ -81,15 +88,15 @@ namespace TickTackToes
             btn.Text = playerSymbol;
             btn.Enabled = false;
             gameLogic.MakeMove(row, col, playerSymbol);
+            GameOver();
             isXTurn = !isXTurn;
-            //InteractionUI.ShowPlayerTurn(isXTurn);
         }
         //обработка хода ИИ
         void SoloGameAi()
         {
             if (isSoloGame && !isGameWon)
             {
-                var aiLogic = new AILogic(gameLogic, isXTurn);
+                var aiLogic = new AILogic(gameLogic, forAI);
                 var move = aiLogic.FindBestMove();
                 if (move != null)
                 {
@@ -107,8 +114,8 @@ namespace TickTackToes
                     }
                 }
             }
+            GameOver();
             isXTurn = !isXTurn;
-            //InteractionUI.ShowPlayerTurn(isXTurn);
         }
 
         private void GameOver()
@@ -116,7 +123,7 @@ namespace TickTackToes
             if (gameLogic.CheckWin())
             {
                 isGameWon = true;
-                InteractionUI.ShowWin(!isXTurn);
+                InteractionUI.ShowWin(isXTurn);
                 isGameWon = true;
 
             }
@@ -129,9 +136,46 @@ namespace TickTackToes
 
             if (isGameWon)
             {
-                Application.Restart();
+                ResetGame();
             }
 
+        }
+        private void ResetGame()
+        {
+            gameLogic.Reset();
+            isGameWon = false;
+            foreach (Control c in tableLayoutPanel2.Controls)
+            {
+                if (c is Button btn)
+                {
+                    btn.Text = string.Empty;
+                    btn.Enabled = true;
+                }
+            }
+
+            if (isSoloGame)
+            {
+
+                isXTurn = true;
+                int randomNumber = new Random().Next(0, 2);
+                forAI = Convert.ToBoolean(randomNumber);
+                InteractionUI.ShowPlayerTurn(!forAI);
+                if (isXTurn == forAI) { 
+                SoloGameAi();
+                }
+
+            }
+        }
+
+        private void LoadProperties()
+        {
+            if (!isSoloGame)
+            {
+                return;
+            }
+            int randomNumber = new Random().Next(0, 2);
+            forAI = Convert.ToBoolean(randomNumber);
+            this.Load += TickTackToe_Load;
         }
     }
 }

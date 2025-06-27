@@ -10,7 +10,7 @@ namespace TickTackToes
     {
         public static void ShowPlayerTurn(bool isX)
         {
-            MessageBox.Show($"Ход игрока {(isX ? "X" : "O")}", "Ход", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Вы: {(isX ? "X" : "O")}", "Ход", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void ShowWin(bool isX)
