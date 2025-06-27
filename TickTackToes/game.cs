@@ -8,6 +8,7 @@ namespace TickTackToes
     {
         //flags
         private bool isXTurn; // Track whose turn it is
+        private bool forAI;
         private bool isSoloGame;
         private bool isGameWon = false;
 
@@ -19,7 +20,6 @@ namespace TickTackToes
         {
             int randomNumber = new Random().Next(0, 2); // верхняя не включительно
             isXTurn = Convert.ToBoolean(randomNumber);
-
             InitializeComponent();
             this.KeyPreview = true;
             this.KeyDown += TickTackToe_KeyDown;
@@ -61,34 +61,101 @@ namespace TickTackToes
         //    isXTurn = !isXTurn;
         //}
 
-
-
-        private void MultiplayerLogic()
+        private void MyButton_Click(object sender, EventArgs e)
         {
+            if (isGameWon) return;
 
+            Button? btn = sender as Button;
+            if (btn == null || !string.IsNullOrEmpty(btn.Text))
+                return;
+
+            int row = tableLayoutPanel2.GetRow(btn);
+            int col = tableLayoutPanel2.GetColumn(btn);
+
+            Player(btn, row, col);
+
+            // Ход ИИ (если solo game)
+            if (isSoloGame && !isGameWon)
+            {
+                var aiLogic = new AILogic(gameLogic, isXTurn);
+                var move = aiLogic.FindBestMove();
+                if (move != null)
+                {
+                    // Найти соответствующую кнопку по координатам
+                    foreach (Control c in tableLayoutPanel2.Controls)
+                    {
+                        if (c is Button aiBtn &&
+                            tableLayoutPanel2.GetRow(aiBtn) == move.Value.row &&
+                            tableLayoutPanel2.GetColumn(aiBtn) == move.Value.col)
+                        {
+                            aiBtn.Text = isXTurn ? "X" : "O";
+                            aiBtn.Enabled = false;
+                            gameLogic.MakeMove(move.Value.row, move.Value.col, aiBtn.Text);
+                            break;
+                        }
+                    }
+
+                    if (gameLogic.CheckWin())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowWin(isXTurn);
+                        
+                        return;
+                    }
+                    if (gameLogic.CheckDraw())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowDraw();
+                        
+                        return;
+                    }
+
+                    isXTurn = !isXTurn;
+                    InteractionUI.ShowPlayerTurn(isXTurn);
+                }
+            }
+        }
+
+
+
+        
+
+
+        void Player(Button btn,int row, int col )
+        {
+            // Ход игрока
+            string playerSymbol = isXTurn ? "X" : "O";
+            btn.Text = playerSymbol;
+            btn.Enabled = false;
+            gameLogic.MakeMove(row, col, playerSymbol);
+
+            if (gameLogic.CheckWin())
+            {
+                isGameWon = true;
+                InteractionUI.ShowWin(isXTurn);
+                return;
+            }
+            if (gameLogic.CheckDraw())
+            {
+                isGameWon = true;
+                InteractionUI.ShowDraw();
+                return;
+            }
+
+            isXTurn = !isXTurn;
+            InteractionUI.ShowPlayerTurn(isXTurn);
 
         }
 
-        private void SoloGameLogic()
-        {
-            AILogic aiLogic = new AILogic(gameLogic, isXTurn);
-            // AI's turn
-            (int row, int col)? aiMove = aiLogic.CanAIWin(aiLogic.aiSymbol);
-            if (aiMove == null)
-            {
-                aiMove = aiLogic.BlockPlayer();
-            }
-            if (aiMove == null)
-            {
-                // If no winning or blocking move, choose a random empty cell
-                aiMove = gameLogic.GetRandomEmptyCell();
-            }
-            if (aiMove != null)
-            {
-                gameLogic.MakeMove(aiMove.Value.row, aiMove.Value.col, aiLogic.aiSymbol);
-                isXTurn = !isXTurn;
-                InteractionUI.ShowPlayerTurn(isXTurn);
-            }
 
-        }
+
+
+
+
+
+
+
+
+
+    }
 }
