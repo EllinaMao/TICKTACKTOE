@@ -6,67 +6,36 @@ namespace TickTackToes
 {
     public partial class TickTackToe : Form
     {
+        //flags
         private bool isXTurn; // Track whose turn it is
-        private int movesCount = 0;
-        private string[,] gameBoard;
+        private bool forAI;
         private bool isSoloGame;
         private bool isGameWon = false;
+
+        // Add a GameLogic instance
+        private GameLogic gameLogic;
+
+        //constructors
         public TickTackToe(bool GameChoice)
         {
             int randomNumber = new Random().Next(0, 2); // верхняя не включительно
             isXTurn = Convert.ToBoolean(randomNumber);
-
             InitializeComponent();
             this.KeyPreview = true;
             this.KeyDown += TickTackToe_KeyDown;
-            this.FormClosing += TickTackToe_FormClosing;
+            this.FormClosing += ExitButton_Click;
 
-            FillArray();
+            isSoloGame = GameChoice; // true - solo game, false - multiplayer
 
-            PlayerMessage();
-            isSoloGame = GameChoice;//true - solo game, false - multiplayer
-
+            // Initialize the GameLogic instance
+            gameLogic = new GameLogic();
         }
-        private void TickTackToe_FormClosing(object sender, FormClosingEventArgs e)
+
+        private void ExitButton_Click(object? sender, EventArgs e)
         {
             Application.Exit();
         }
-        private void PlayerMessage()
-        {
-            if (isXTurn)
-            {
-                MessageBox.Show("Ход игрока X");
-            }
-            else
-            {
-                MessageBox.Show("Ход игрока O");
-            }
-        }
-        private void ResetGame()
-        {
-            foreach (Control control in tableLayoutPanel2.Controls)
-            {
-                if (control is Button button)
-                {
-                    button.Text = string.Empty;
-                    button.Enabled = true;
-                }
-            }
-            isXTurn = new Random().Next(0, 2) == 0; // Случайный выбор, кто начинает
-            movesCount = 0;
-            FillArray();
-        }
-        private void FillArray()
-        {
-            gameBoard = new string[3, 3];
-            for (int row = 0; row < 3; row++)
-            {
-                for (int col = 0; col < 3; col++)
-                {
-                    gameBoard[row, col] = string.Empty;
-                }
-            }
-        }
+
         private void TickTackToe_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -75,96 +44,115 @@ namespace TickTackToes
             }
         }
 
+        //private void MyButton_Click(object sender, EventArgs e)
+        //{
+        //    Button? btn = sender as Button;
+        //    if (btn == null || !string.IsNullOrEmpty(btn.Text))
+        //    {
+        //        return;
+        //    }
+
+        //    btn.Text = isXTurn ? "X" : "O";
+        //    btn.Enabled = false;
+        //    InteractionUI.ShowPlayerTurn(isXTurn);
+
+        //    gameBoard[tableLayoutPanel2.GetRow(btn), tableLayoutPanel2.GetColumn(btn)] = btn.Text;
+
+        //    isXTurn = !isXTurn;
+        //}
+
         private void MyButton_Click(object sender, EventArgs e)
         {
+            if (isGameWon) return;
+
             Button? btn = sender as Button;
             if (btn == null || !string.IsNullOrEmpty(btn.Text))
+                return;
+
+            int row = tableLayoutPanel2.GetRow(btn);
+            int col = tableLayoutPanel2.GetColumn(btn);
+
+            Player(btn, row, col);
+
+            // Ход ИИ (если solo game)
+            if (isSoloGame && !isGameWon)
             {
+                var aiLogic = new AILogic(gameLogic, isXTurn);
+                var move = aiLogic.FindBestMove();
+                if (move != null)
+                {
+                    // Найти соответствующую кнопку по координатам
+                    foreach (Control c in tableLayoutPanel2.Controls)
+                    {
+                        if (c is Button aiBtn &&
+                            tableLayoutPanel2.GetRow(aiBtn) == move.Value.row &&
+                            tableLayoutPanel2.GetColumn(aiBtn) == move.Value.col)
+                        {
+                            aiBtn.Text = isXTurn ? "X" : "O";
+                            aiBtn.Enabled = false;
+                            gameLogic.MakeMove(move.Value.row, move.Value.col, aiBtn.Text);
+                            break;
+                        }
+                    }
+
+                    if (gameLogic.CheckWin())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowWin(isXTurn);
+                        
+                        return;
+                    }
+                    if (gameLogic.CheckDraw())
+                    {
+                        isGameWon = true;
+                        InteractionUI.ShowDraw();
+                        
+                        return;
+                    }
+
+                    isXTurn = !isXTurn;
+                    InteractionUI.ShowPlayerTurn(isXTurn);
+                }
+            }
+        }
+
+
+
+        
+
+
+        void Player(Button btn,int row, int col )
+        {
+            // Ход игрока
+            string playerSymbol = isXTurn ? "X" : "O";
+            btn.Text = playerSymbol;
+            btn.Enabled = false;
+            gameLogic.MakeMove(row, col, playerSymbol);
+
+            if (gameLogic.CheckWin())
+            {
+                isGameWon = true;
+                InteractionUI.ShowWin(isXTurn);
+                return;
+            }
+            if (gameLogic.CheckDraw())
+            {
+                isGameWon = true;
+                InteractionUI.ShowDraw();
                 return;
             }
 
-            btn.Text = isXTurn ? "X" : "O";
-            btn.Enabled = false;
-            movesCount++;
-            gameBoard[tableLayoutPanel2.GetRow(btn), tableLayoutPanel2.GetColumn(btn)] = btn.Text;
-
-            GameLogic();
             isXTurn = !isXTurn;
-        }
-        
-        private void AIMove(int row, int emptyCol, char symbol)
-        {
-            
-        }
-        private bool TryCompleteRow(string simbol)
-        {
-            int count, emptyCol;
-            for (int row = 0; row < 3; row++)
-            {
-                count = 0; emptyCol = -1;
-                for (int col = 0; col<3; col++)
-                {
-                    if (gameBoard[row, col] == simbol)
-                    {
-                        count++;
-                    }
-                    else if (string.IsNullOrEmpty(gameBoard[row, col]))
-                    { 
-                        emptyCol = col;
-                    }
-                }
-            }
-            return false;
+            InteractionUI.ShowPlayerTurn(isXTurn);
 
         }
-        
-        private void ExitButton_Click(object? sender, EventArgs e)
-        {
-            Application.Exit();
-        }
 
-        private bool CheckWin() {
-            for (int j = 0; j < 3; j++)
-            {
-                if (!string.IsNullOrEmpty(this.gameBoard[j, 0]) &&
-                    this.gameBoard[j, 0] == this.gameBoard[j, 1] && this.gameBoard[j, 1] == this.gameBoard[j, 2])
-                {
-                    return true;
-                }
-                if (!string.IsNullOrEmpty(this.gameBoard[0, j]) &&
-                    this.gameBoard[0, j] == this.gameBoard[1, j] && this.gameBoard[1, j] == this.gameBoard[2, j])
-                { return true; }
-            }
-            if (!string.IsNullOrEmpty(gameBoard[0, 0]) &&
-             gameBoard[0, 0] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 2])
-            { return true; }
-            if (!string.IsNullOrEmpty(gameBoard[0, 2]) &&
-                gameBoard[0, 2] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 0])
-            { return true; }
 
-            return false;
-        }
-        private bool CheckDraw()
-        {
-            return movesCount == 9 && !isGameWon;
-        }
-        private bool GameLogic()
-        {
-            isGameWon=CheckWin();
-            if (isGameWon)
-            {
-                MessageBox.Show($"{(isXTurn ? "X" : "O")} победил!");
-                ResetGame();
-                return true;
-            }
-            if (CheckDraw())
-            {
-                MessageBox.Show("Ничья!");
-                ResetGame();
-                return true;
-            }
-            return false;
-        }
+
+
+
+
+
 
 
 
