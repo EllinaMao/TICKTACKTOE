@@ -19,7 +19,7 @@ namespace TickTackToes
             aiSymbol = symbol ? 'X' : 'O';
             playerSymbol = symbol ? 'O' : 'X';
         }
-        private (int row, int col)? CanAIWin(char AISymbol)
+        private (int row, int col)? СheckFor(char AISymbol)
         {
             // Проверка строк
             for (int row = 0; row < 3; row++)
@@ -47,42 +47,15 @@ namespace TickTackToes
             return null;
         }
 
-        public (int row, int col)? BlockPlayer()
-        {
-            // Проверка строк
-            for (int row = 0; row < 3; row++)
-            {
-                var blockMove = FindRowWin(row, playerSymbol);
-                if (blockMove != null)
-                    return blockMove;
-            }
-            // Проверка столбцов
-            for (int col = 0; col < 3; col++)
-            {
-                var blockMove = FindColWin(col, playerSymbol);
-                if (blockMove != null)
-                    return blockMove;
-            }
-            // Проверка главной диагонали
-            var mainDiagBlock = FindMainDiagonalWin(playerSymbol);
-            if (mainDiagBlock != null)
-                return mainDiagBlock;
-            // Проверка побочной диагонали
-            var antiDiagBlock = FindAntiDiagonalWin(playerSymbol);
-            if (antiDiagBlock != null)
-                return antiDiagBlock;
-
-            return null;
-        }
-
+        
         public (int row, int col)? FindBestMove()
         {
             // 1. Попробовать выиграть
-            var aiWin = CanAIWin(aiSymbol);
+            var aiWin = СheckFor(aiSymbol);
             if (aiWin != null) { return aiWin; }
 
             // 2. Заблокировать игрока
-            var blockPlayer = BlockPlayer();
+            var blockPlayer = СheckFor(playerSymbol);
             if (blockPlayer != null) { return blockPlayer; }
 
             // 3. Занять центр
